@@ -10,12 +10,12 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
-  response.render('index', {title : 'ブッキー！'});
+app.get('/', function (request, response) {
+    response.render('index', { title: 'ブッキー！' });
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+app.listen(app.get('port'), function () {
+    console.log('Node app is running on port', app.get('port'));
 });
 
 
@@ -148,18 +148,18 @@ bot.on("messageCreate", (msg) => {
         var Temp = str.replace(/<@309001655305895946>/g, "");
         var Replacestr = Temp.replace(/ /g, "");
         var encstr = encodeURIComponent(Replacestr);
-        var rand2 = Math.floor(Math.random() * 4); //4つの人工知能からランダム選択
+        var rand2 = Math.floor(Math.random() * 3); //3つの人工知能からランダム選択(リクルートは休止中)
         var request = require('request');
-        
-        if (Replacestr.match(/静かに/)){
+
+        if (Replacestr.match(/静かに/)) {
             bot.createMessage(msg.channel.id, "すみませんでした・・・黙ります。");
             voice_flag = 0;
-        }else if (Replacestr.match(/喋って/)){
+        } else if (Replacestr.match(/喋って/)) {
             bot.createMessage(msg.channel.id, "はい！吹雪、喋りますっ！");
             voice_flag = 1;
         }
         if (mode == "srtr") { //しりとり中の場合はしりとり人工知能を選択
-            rand2 = 2;
+            rand2 = 1;
         }
         if (rand2 == 0) { //ユーザーローカル社の人工知能
             var URLstr = "https://chatbot-api.userlocal.jp/api/chat?key=a4fd4de3d10b7c704017&message=" + encstr;
@@ -172,6 +172,7 @@ bot.on("messageCreate", (msg) => {
                     console.log('error: ' + response.statusCode);
                 }
             });
+            /**
         } else if (rand2 == 1) { //リクルート社の人工知能
             var options = {
                 uri: "https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk",
@@ -193,7 +194,8 @@ bot.on("messageCreate", (msg) => {
                 }
 
             });
-        } else if (rand2 == 2) { //NTTドコモ社の人工知能
+            **/
+        } else if (rand2 == 1) { //NTTドコモ社の人工知能
             var apikey_D = "4b6a62756e67322f385774655570396962644e594a676249754b736a6e455a477065594a3865764b734f2e";
             var request = require('request');
             if (context_flag == "0") { //初回の会話のみこの処理
@@ -237,11 +239,11 @@ bot.on("messageCreate", (msg) => {
                 });
             }
         }
-        else if (rand2 == 3) { //コトゴト社の人工知能
+        else if (rand2 == 2) { //コトゴト社の人工知能
             var apikey_K = "86aef263113e5e8d110d049a5d56b624";
             var mail = "pitekusu@gmail.com";
             var passwd = "moyashi3104";
-            var persona_num = "1" // 「0:ノーマル」,「1:ツンデレ(女)」,「2:ツンデレ(男)」,「3:神」
+            var persona_num = "0" // 「0:ノーマル」,「1:ツンデレ(女)」,「2:ツンデレ(男)」,「3:神」
             var URLstr = "https://www.cotogoto.ai/webapi/noby.json?&appkey=" + apikey_K + "&mail=" + mail + "&pass=" + passwd + "&persona=" + persona_num + "&text=" + encstr;
             request(URLstr, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
@@ -320,14 +322,13 @@ nenohi.on("messageCreate", (msg) => {
 nenohi.on("messageCreate", (msg) => {
     var str = msg.content;
     var nk = new Array(
-        { name: "nk1.mp3" },
-        { name: "nk2.mp3" },
-        { name: "nk3.mp3" },
-        { name: "nk4.mp3" },
-        { name: "kongyo.mp3" }
+        { name: "./music/nk1.mp3" },
+        { name: "./music/nk2.m4a" },
+        { name: "./music/nk3.mp3" },
+        { name: "./music/nk4.m4a" },
     );
     if (str.match(/コンギョ/)) {
-        var rand = Math.floor(Math.random() * 5);
+        var rand = Math.floor(Math.random() * 4);
         var filename = nk[rand]["name"]; // Get the filename
         nenohi.joinVoiceChannel(msg.member.voiceState.channelID).catch((err) => { // Join the user's voice channel
             nenohi.createMessage(msg.channel.id, "Error joining voice channel: " + err.message); // Notify the user if there is an error
@@ -346,8 +347,15 @@ nenohi.on("messageCreate", (msg) => {
 
 nenohi.on("messageCreate", (msg) => {
     var str = msg.content;
+        var aum = new Array(
+        { name: "./music/yattaze1.m4a" },
+        { name: "./music/yattaze2.m4a" },
+        { name: "./music/yattaze3.m4a" },
+        { name: "./music/yattaze4.m4a" }
+    );
     if (str.match(/やったぜ/)) {
-        var filename = "yattaze.mp3"; // Get the filename
+        var rand4 = Math.floor(Math.random() * 4);
+        var filename = aum[rand4]["name"]; // Get the filename
         nenohi.joinVoiceChannel(msg.member.voiceState.channelID).catch((err) => { // Join the user's voice channel
             nenohi.createMessage(msg.channel.id, "Error joining voice channel: " + err.message); // Notify the user if there is an error
             console.log(err); // Log the error
@@ -366,19 +374,21 @@ nenohi.on("messageCreate", (msg) => {
 nenohi.on("messageCreate", (msg) => {
     var str = msg.content;
     var aum = new Array(
-        { name: "ningen.mp3" },
-        { name: "daisinsei.mp3" },
-        { name: "kyokugen.mp3" },
-        { name: "susume.mp3" },
-        { name: "habatake.mp3" },
-        { name: "ganesya.mp3" },
-        { name: "keppaku.mp3" },
-        { name: "maoharau.mp3" },
-        { name: "march1.mp3" },
-        { name: "zinriki.wma" }
+        { name: "./music/aum1.mp3" },
+        { name: "./music/aum2.mp3" },
+        { name: "./music/aum3.mp3" },
+        { name: "./music/aum4.mp3" },
+        { name: "./music/aum5.mp3" },
+        { name: "./music/aum6.mp3" },
+        { name: "./music/aum7.mp3" },
+        { name: "./music/aum8.mp3" },
+        { name: "./music/aum9.mp3" },
+        { name: "./music/aum10.mp3" },
+        { name: "./music/aum11.mp3" },
+        { name: "./music/aum12.mp3" }
     );
     if (msg.author.id != "309352629375336449" && str.match(/解脱/)) {
-        var rand4 = Math.floor(Math.random() * 10);
+        var rand4 = Math.floor(Math.random() * 12);
         var filename = aum[rand4]["name"]; // Get the filename
         nenohi.joinVoiceChannel(msg.member.voiceState.channelID).catch((err) => { // Join the user's voice channel
             nenohi.createMessage(msg.channel.id, "Error joining voice channel: " + err.message); // Notify the user if there is an error
