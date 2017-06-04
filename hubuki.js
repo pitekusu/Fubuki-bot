@@ -325,7 +325,7 @@ nenohi.on("messageCreate", (msg) => {
         { name: "./music/nk1.mp3" },
         { name: "./music/nk2.m4a" },
         { name: "./music/nk3.mp3" },
-        { name: "./music/nk4.m4a" },
+        { name: "./music/nk4.m4a" }
     );
     if (str.match(/コンギョ/)) {
         var rand = Math.floor(Math.random() * 4);
