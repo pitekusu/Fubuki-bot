@@ -10,6 +10,7 @@
     "forever-monitor": "^1.7.1",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
+    "newrelic": "^1.39.1",
     "querystring": "^0.2.0",
     "request": "^2.81.0"
   },
