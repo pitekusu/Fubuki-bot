@@ -478,8 +478,9 @@ function VoiceChat(VoiceText) {
                 ws.write(chunk);
             });
             res.on('end', function () {
-                ws.end();
-                VoicePlay('voice.ogg');
+                ws.end(null, null, function () {
+                    VoicePlay('voice.ogg');
+                });
             });
         });
 
